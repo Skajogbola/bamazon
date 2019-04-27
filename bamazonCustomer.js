@@ -21,30 +21,50 @@ function start() {
         for (var i = 0; i < res.length; i++) {
             console.log("ids:" + res[i].item_id + "   ||   " + "Name:" + res[i].product_name + "   ||   " + "Prices:" + res[i].price);
         }
-        connection.end();
+        promptUser();
     });
 }
 
+function promptUser() {
+    inquirer
+        .prompt([
+            {
+                name: "id",
+                type: "input",
+                message: "What is the id of the product you will like to purchase?",
+                filter: Number,
+            },
+            {
+                name: "unit",
+                type: "input",
+                message: "How many units of this product will you purchase?",
+                filter: Number,
+            },
+        ])
+        .then(function (answer) {
+            var purchaseID = answer.id;
+            var purchaseQuantity = answer.unit;
+                connection.query(
+                    "SELECT * FROM products WHERE item_id =  " + purchaseID, 
+                    function (err, res) {
+                        if (err) throw err;
+                        // To verify enough quantity
+                        if (res[0].stock_quantity - purchaseQuantity >= 0) {
+                         console.log("Congratulations, your item is in Stock!");
+                         console.log("Your Grand Total for " + purchaseQuantity + " units of " +  res[0].product_name + " is: $" + res[0]. price*purchaseQuantity + " Thank you!");   
+                        
+                        connection.query("UPDATE products SET stock_quantity = stock_quantity - " + amtNeeded + "WHERE item_id = " + ID);
+                    } else{
+                        console.log("Insufficient quantity, sorry we do not have enough " + res[0].product_name + "to complete your order.");
+                    };
+                    connection.end(); 
+                    }
+                );
+            });
+    }
+    
+    
+    
 
-// function start() {
-//     inquirer
-//         .prompt({
-//             name: "artist",
-//             type: "input",
-//             message: "What artist would you like to search for?"
-//         })
-//         .then(function (answer) {
-//             connection.query(
-//                 "SELECT * FROM Top5000 WHERE ?",
-//                 {
-//                     artist_name: answer.artist
-//                 },
-//                 function (err, res) {
-//                     if (err) throw err;
-//                     for (var i = 0; i < res.length; i++) {
-//                         console.log("Position:" + res[i].position + " | " + "Name:" + res[i].artist_name + " | " + "Title:" + res[i].title + " | " + "Year:" + res[i].song_year + " | " + "Ranking:" + res[i].world_ranking);
-//                     }
-//                     start();
-//                 }
-//             );
-//         });
+
+
