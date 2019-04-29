@@ -55,18 +55,22 @@ function promptUser() {
                     // To verify enough quantity
                     if (res[0].stock_quantity - purchaseQuantity >= 0) {
                         console.log("Congratulations, your item is in Stock!");
-                        console.log("Your Grand Total for " + purchaseQuantity + " units of " + res[0].product_name + " is: $" + res[0].price * purchaseQuantity + " Thank you!");
+                        console.log("Your Grand Total for " + purchaseQuantity + " units of " + res[0].product_name + " is: $" + res[0].price * purchaseQuantity.toFixed(2) + " Thank you!");
 
-                    //     connection.query(
-                    //         "UPDATE products SET stock_quantity = stock_quantity - " + purchaseQuantity + "WHERE item_id =" + purchaseID);
-                    // } else {
-                    //     console.log("Insufficient quantity!");
-                    // };
-                    
-                    connection.end();
-                }
-            )
-            // start();
+                        connection.query(
+                            "UPDATE products SET stock_quantity=? WHERE item_id =?",
+                            [res[0].stock_quantity - purchaseQuantity, purchaseID],
+
+                            function (err, inventory) {
+                                if (err) throw err;
+
+                                start();  // Runs the prompt again, so the customer can continue shopping.
+                            });
+                         } else {
+                        console.log("Insufficient quantity!");
+                        start();  // Runs the prompt again, so the customer can continue shopping.
+                    };
+                });
         });    
 }
 
