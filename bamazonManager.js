@@ -16,6 +16,7 @@ connection.connect(function (err) {
 });
 
 function start() {
+    console.log("***************** WELCOME TO BAMAZON ****************");
     inquirer
         .prompt({
             name: "action",
