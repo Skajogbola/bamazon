@@ -40,17 +40,17 @@ function start() {
                     lowInventory();
                     break;
 
-                case "Add to Inventory":
-                    addInventory();
-                    break;
+                // case "Add to Inventory":
+                //     addInventory();
+                //     break;
 
-                case "Add New Product":
-                    addProduct();
-                    break;
+                // case "Add New Product":
+                //     addProduct();
+                //     break;
 
-                case "exit":
-                    connection.end();
-                    break;
+                // case "exit":
+                //     connection.end();
+                //     break;
             }
         });
 }
@@ -59,7 +59,19 @@ function productForSale() {
     connection.query("SELECT * FROM products", function (err, res) {
         if (err) throw err;
         for (var i = 0; i < res.length; i++) {
-            console.log("ids:" + res[i].item_id + "   ||   " + "Name:" + res[i].product_name + "   ||   " + "Prices:" + res[i].price + + "   ||   " + "Quantities:" + res[i].stock_quantity);
+            console.log("ids:" + res[i].item_id + "   ||   " + "Name:" + res[i].product_name + "   ||   " + "Prices:" + res[i].price + "   ||   " + "Quantities:" + res[i].stock_quantity);
+        }
+        start();
+    });
+}
+
+function lowInventory() {
+    connection.query("SELECT * FROM products WHERE stock_quantity < 190", 
+    function (err, res) {
+        if (err) throw err;
+        for (var i = 0; i < res.length; i++) {
+            console.log("Low Inventory!!!");
+            console.log("ids:" + res[i].item_id + "   ||   " + "Name:" + res[i].product_name);
         }
         start();
     });
