@@ -19,33 +19,33 @@ function start() {
     console.log("***************** WELCOME TO BAMAZON ****************");
     inquirer
         .prompt({
-            name: "action",
+            name: "menu",
             type: "list",
             message: "What would you like to do?",
             choices: [
-                "Find songs by artist",
-                "Find all artists who appear more than once",
-                "Find data within a specific range",
-                "Search for a specific song",
+                "View Products for Sale",
+                "View Low Inventory",
+                "Add to Inventory",
+                "Add New Product",
                 "exit"
             ]
         })
         .then(function (answer) {
-            switch (answer.action) {
-                case "Find songs by artist":
-                    artistSearch();
+            switch (answer.menu) {
+                case "View Products for Sale":
+                    productForSale();
                     break;
 
-                case "Find all artists who appear more than once":
-                    multiSearch();
+                case "View Low Inventory":
+                    lowInventory();
                     break;
 
-                case "Find data within a specific range":
-                    rangeSearch();
+                case "Add to Inventory":
+                    addInventory();
                     break;
 
-                case "Search for a specific song":
-                    songSearch();
+                case "Add New Product":
+                    addProduct();
                     break;
 
                 case "exit":
@@ -53,4 +53,14 @@ function start() {
                     break;
             }
         });
+}
+
+function productForSale() {
+    connection.query("SELECT * FROM products", function (err, res) {
+        if (err) throw err;
+        for (var i = 0; i < res.length; i++) {
+            console.log("ids:" + res[i].item_id + "   ||   " + "Name:" + res[i].product_name + "   ||   " + "Prices:" + res[i].price + + "   ||   " + "Quantities:" + res[i].stock_quantity);
+        }
+        start();
+    });
 }
