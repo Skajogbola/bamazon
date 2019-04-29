@@ -16,6 +16,7 @@ connection.connect(function (err) {
 });
 
 function start() {
+    console.log("***************** WELCOME TO BAMAZON ****************");
     connection.query("SELECT * FROM products", function (err, res) {
         if (err) throw err;
         for (var i = 0; i < res.length; i++) {
@@ -44,27 +45,33 @@ function promptUser() {
         .then(function (answer) {
             var purchaseID = answer.id;
             var purchaseQuantity = answer.unit;
-                connection.query(
-                    "SELECT * FROM products WHERE item_id =  " + purchaseID, 
-                    function (err, res) {
-                        if (err) throw err;
-                        // To verify enough quantity
-                        if (res[0].stock_quantity - purchaseQuantity >= 0) {
-                         console.log("Congratulations, your item is in Stock!");
-                         console.log("Your Grand Total for " + purchaseQuantity + " units of " +  res[0].product_name + " is: $" + res[0]. price*purchaseQuantity + " Thank you!");   
-                        
-                        connection.query("UPDATE products SET stock_quantity = stock_quantity - " + amtNeeded + "WHERE item_id = " + ID);
-                    } else{
-                        console.log("Insufficient quantity, sorry we do not have enough " + res[0].product_name + "to complete your order.");
-                    };
-                    connection.end(); 
-                    }
-                );
-            });
-    }
-    
-    
-    
+            connection.query(
+                "SELECT * FROM products WHERE ?",
+                {
+                    item_id: purchaseID
+                },
+                function (err, res) {
+                    if (err) throw err;
+                    // To verify enough quantity
+                    if (res[0].stock_quantity - purchaseQuantity >= 0) {
+                        console.log("Congratulations, your item is in Stock!");
+                        console.log("Your Grand Total for " + purchaseQuantity + " units of " + res[0].product_name + " is: $" + res[0].price * purchaseQuantity + " Thank you!");
+
+                    //     connection.query(
+                    //         "UPDATE products SET stock_quantity = stock_quantity - " + purchaseQuantity + "WHERE item_id =" + purchaseID);
+                    // } else {
+                    //     console.log("Insufficient quantity!");
+                    // };
+                    
+                    connection.end();
+                }
+            )
+            // start();
+        });    
+}
+
+
+
 
 
 
