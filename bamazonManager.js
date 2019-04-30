@@ -1,6 +1,7 @@
 var inquirer = require("inquirer");
 
 var mysql = require("mysql");
+var Table = require('cli-table');
 
 var connection = mysql.createConnection({
     host: "localhost",
@@ -58,9 +59,13 @@ function start() {
 function productForSale() {
     connection.query("SELECT * FROM products", function (err, res) {
         if (err) throw err;
+        var table = new Table({
+            head: ['ID', 'Product Name', 'Price', 'Quantities']
+        });
         for (var i = 0; i < res.length; i++) {
-            console.log("ids:" + res[i].item_id + "   ||   " + "Name:" + res[i].product_name + "   ||   " + "Prices:" + res[i].price + "   ||   " + "Quantities:" + res[i].stock_quantity);
+            table.push([res[i].item_id, res[i].product_name, res[i].price, res[i].stock_quantity]);
         }
+        console.log(table.toString());
         start();
     });
 }
@@ -73,10 +78,13 @@ function lowInventory() {
                 console.log("There are currently no items with Low Inventory!")
                 start();
             } else {
+                var table = new Table({
+                    head: ['ID', 'Product Name']
+                });
                 for (var i = 0; i < res.length; i++) {
-                    console.log("============================================= Low Bamazon Inventory (5 or Less in Stock) ===============================================");
-                    console.log("ids:" + res[i].item_id + "   ||   " + "Name:" + res[i].product_name);
-                };
+                    table.push([res[i].item_id, res[i].product_name]);
+                }
+                console.log(table.toString());
                 start();
             }
         });
@@ -129,22 +137,22 @@ function addProduct() {
             {
                 type: "input",
                 name: "name",
-                message: "Please enter the item name of the new product."
+                message: "Please enter the item name of the new product:"
             },
             {
                 type: "input",
                 name: "department",
-                message: "Please enter which department name of which the new product belongs.",
+                message: "Please enter which department name of which the new product belongs:",
             },
             {
                 type: "input",
                 name: "price",
-                message: "Please enter the price of the new product (0.00).",
+                message: "Please enter the price of the new product (0.00):",
             },
             {
                 type: "input",
                 name: "quantity",
-                message: "Please enter the stock quantity of the new product.",
+                message: "Please enter the stock quantity of the new product:",
             }
         ])
         .then(function (answer) {

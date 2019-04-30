@@ -17,7 +17,7 @@ connection.connect(function (err) {
 });
 
 function start() {
-    
+
     console.log("***************** WELCOME TO BAMAZON ****************");
     connection.query("SELECT * FROM products", function (err, res) {
         if (err) throw err;
@@ -61,7 +61,7 @@ function promptUser() {
                     // To verify enough quantity
                     if (res[0].stock_quantity - purchaseQuantity >= 0) {
                         console.log("Congratulations, your item is in Stock!");
-                        console.log("Your Grand Total for " + purchaseQuantity + " units of " + res[0].product_name + " is: $" + res[0].price * purchaseQuantity.toFixed(2) + " Thank you!");
+                        console.log("Your Grand Total for " + purchaseQuantity + " units of " + res[0].product_name + " is: $" + (res[0].price.toFixed(2) * purchaseQuantity) + " Thank you!");
 
                         connection.query(
                             "UPDATE products SET stock_quantity=? WHERE item_id =?",
