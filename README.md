@@ -46,3 +46,10 @@ The **Add New Product** option allows the user to enter details about a new prod
 ![order_purchase](https://github.com/Skajogbola/bamazon/blob/master/images/manager4a.PNG)
 
 ![order_purchase](https://github.com/Skajogbola/bamazon/blob/master/images/manager4b.PNG)
+
+To run the manager interface please follow the steps below:
+
+	git clone git@github.com:Skajogbola/bamazon.git
+	cd bamazon
+	npm install
+	node bamazonManager.js
