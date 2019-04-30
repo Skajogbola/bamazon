@@ -66,14 +66,19 @@ function productForSale() {
 }
 
 function lowInventory() {
-    connection.query("SELECT * FROM products WHERE stock_quantity <= 5",
+    connection.query("SELECT * FROM products WHERE stock_quantity < 5",
         function (err, res) {
             if (err) throw err;
-            for (var i = 0; i < res.length; i++) {
-                console.log("============================================= Low Bamazon Inventory (5 or Less in Stock) ===============================================");
-                console.log("ids:" + res[i].item_id + "   ||   " + "Name:" + res[i].product_name);
+            if (res.length === 0) {
+                console.log("There are currently no items with Low Inventory!")
+                start();
+            } else {
+                for (var i = 0; i < res.length; i++) {
+                    console.log("============================================= Low Bamazon Inventory (5 or Less in Stock) ===============================================");
+                    console.log("ids:" + res[i].item_id + "   ||   " + "Name:" + res[i].product_name);
+                };
+                start();
             }
-            start();
         });
 }
 
@@ -92,14 +97,29 @@ function addInventory() {
             },
         ])
         .then(function (answer) {
+            connection.query('SELECT stock_quantity FROM products WHERE ?', {
+                item_id: answer.productID
+            }, function(err, res) {
+                if (err) throw err;
+                itemStock = res[0].stock_quantity;
+                itemStock = parseInt(itemStock)
+        
             connection.query(
                 "UPDATE products SET stock_quantity=? WHERE item_id =?",
-                [answer.productNumber, answer.productID],
+                [
+                    {
+                        stock_quantity: itemStock + answer.productNumber
+                    },
+                    {
+                        item_id: answer.productID
+                    }
+                ],
                 function (err, res) {
                     if (err) throw err;
                     console.log("======Item has been sucessfully updated to your inventory=======");
                     start();
                 });
+            })
         })
 }
 
@@ -138,7 +158,7 @@ function addProduct() {
                 },
                 function (err, res) {
                     if (err) throw err;
-                    console.log("Your item: " + answer.name +" has been added sucessfully!!");
+                    console.log("Your item: " + answer.name + " has been added sucessfully!!");
                     start();
                 }
             );
