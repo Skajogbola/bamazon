@@ -30,6 +30,7 @@ The manager interface presents a list of four options, as below.
 	  View Low Inventory 
 	  Add to Inventory 
 	  Add New Product
+	  exit
 	  
 The **View Products for Sale** option allows the user to view the current inventory of store items: item IDs, product name, price, and the quantity available in stock. 
 
@@ -40,6 +41,8 @@ The **View Low Inventory** option shows the user the items which currently have 
 ![order_purchase](https://github.com/Skajogbola/bamazon/blob/master/images/manager2.PNG)
 
 The **Add to Inventory** option allows the user to select a given item ID and add additional inventory to the target item.
+
+![order_purchase](https://github.com/Skajogbola/bamazon/blob/master/images/manager3.PNG)
 
 The **Add New Product** option allows the user to enter details about a new product which will be entered into the database upon completion of the form.
 
