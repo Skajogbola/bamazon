@@ -8,9 +8,10 @@ This application implements a simple command line based storefront using the npm
 
 The customer interface allows the user to view the current inventory of store items include the ids, names, and prices of products for sale. The user is then able to purchase one of the existing items by entering the item ID and the desired quantity. If the selected quantity is currently in stock, the user's order is fulfilled, displaying the total purchase price and updating the store database. 
 
-![order_purchase](https://github.com/Skajogbola/liri-node-app/blob/master/Images/concert-this.PNG)
+![order_purchase](https://github.com/Skajogbola/bamazon/blob/master/images/customer.PNG)
 
-If the desired quantity is not available, the user is prompted to modify their order.
+If the desired quantity is not available, the app logs a phrase "Insufficient quantity!", and then prevent the order from going through.
+![order_purchase](https://github.com/Skajogbola/bamazon/blob/master/images/customerB.PNG)
 
 To run the customer interface please follow the steps below:
 
