@@ -105,29 +105,24 @@ function addInventory() {
             },
         ])
         .then(function (answer) {
-            connection.query('SELECT stock_quantity FROM products WHERE ?', {
-                item_id: answer.productID
-            }, function(err, res) {
-                if (err) throw err;
-                itemStock = res[0].stock_quantity;
-                itemStock = parseInt(itemStock)
-        
-            connection.query(
-                "UPDATE products SET stock_quantity=? WHERE item_id =?",
-                [
-                    {
-                        stock_quantity: itemStock + answer.productNumber
-                    },
-                    {
-                        item_id: answer.productID
-                    }
-                ],
+            connection.query('SELECT * FROM products WHERE item_id =?', [answer.productID],
                 function (err, res) {
-                    if (err) throw err;
-                    console.log("======Item has been sucessfully updated to your inventory=======");
-                    start();
-                });
-            })
+                    connection.query(
+                        "UPDATE products SET ? WHERE ?",
+                        [
+                            {
+                                stock_quantity: res[0].stock_quantity + parseInt(answer.productNumber)
+                            },
+                            {
+                                item_id: answer.productID
+                            }
+                        ],
+                        function (err, res) {
+                            if (err) throw err;
+                            console.log("======Item has been sucessfully updated to your inventory=======");
+                            start();
+                        });
+                })
         })
 }
 
